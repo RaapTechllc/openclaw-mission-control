@@ -6,7 +6,6 @@ from sqlmodel import SQLModel
 
 from app.schemas.common import NonEmptyStr
 
-RUNTIME_ANNOTATION_TYPES = (NonEmptyStr,)
 
 
 class GatewaySessionMessageRequest(SQLModel):

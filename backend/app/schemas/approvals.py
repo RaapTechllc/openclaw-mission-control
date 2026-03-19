@@ -12,7 +12,6 @@ from sqlmodel import Field, SQLModel
 ApprovalStatus = Literal["pending", "approved", "rejected"]
 STATUS_REQUIRED_ERROR = "status is required"
 LEAD_REASONING_REQUIRED_ERROR = "lead reasoning is required"
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID)
 
 
 class ApprovalBase(SQLModel):

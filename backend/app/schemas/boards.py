@@ -12,7 +12,6 @@ from sqlmodel import Field, SQLModel
 _ERR_GOAL_FIELDS_REQUIRED = "Confirmed goal boards require objective and success_metrics"
 _ERR_GATEWAY_REQUIRED = "gateway_id is required"
 _ERR_DESCRIPTION_REQUIRED = "description is required"
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID)
 
 
 class BoardBase(SQLModel):

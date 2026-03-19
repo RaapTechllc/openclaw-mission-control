@@ -7,7 +7,6 @@ from uuid import UUID
 from pydantic import Field
 from sqlmodel import SQLModel
 
-RUNTIME_ANNOTATION_TYPES = (UUID,)
 
 
 class UserBase(SQLModel):

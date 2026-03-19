@@ -10,7 +10,6 @@ from sqlmodel import Field
 from app.core.time import utcnow
 from app.models.tenancy import TenantScoped
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 
 
 class BoardGroup(TenantScoped, table=True):

@@ -7,7 +7,6 @@ from uuid import UUID
 
 from sqlmodel import Field, SQLModel
 
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID)
 
 
 class OrganizationRead(SQLModel):

@@ -13,7 +13,6 @@ from sqlmodel import SQLModel
 
 from app.schemas.common import NonEmptyStr
 
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID, date)
 
 TaskCustomFieldType = Literal[
     "text",

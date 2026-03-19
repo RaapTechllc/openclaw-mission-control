@@ -12,7 +12,6 @@ from app.core.time import utcnow
 from app.models.base import QueryModel
 from app.models.tenancy import TenantScoped
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 
 
 class MarketplaceSkill(TenantScoped, table=True):

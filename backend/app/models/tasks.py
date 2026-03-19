@@ -10,7 +10,6 @@ from sqlmodel import Field
 from app.core.time import utcnow
 from app.models.tenancy import TenantScoped
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 
 
 class Task(TenantScoped, table=True):
@@ -21,8 +20,8 @@ class Task(TenantScoped, table=True):
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     board_id: UUID | None = Field(default=None, foreign_key="boards.id", index=True)
 
-    title: str
-    description: str | None = None
+    title: str = Field(max_length=500)
+    description: str | None = Field(default=None, max_length=50000)
     status: str = Field(default="inbox", index=True)
     priority: str = Field(default="medium", index=True)
     due_at: datetime | None = None

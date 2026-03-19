@@ -13,7 +13,6 @@ from sqlmodel import SQLModel
 from app.schemas.common import NonEmptyStr
 
 HEX_COLOR_RE = re.compile(r"^[0-9a-f]{6}$")
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID, NonEmptyStr)
 
 
 def _normalize_color(value: str | None) -> str | None:

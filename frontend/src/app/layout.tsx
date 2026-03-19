@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 
 import { DM_Serif_Display, IBM_Plex_Sans, Sora } from "next/font/google";
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import { GlobalLoader } from "@/components/ui/global-loader";
@@ -41,12 +42,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body
         className={`${bodyFont.variable} ${headingFont.variable} ${displayFont.variable} min-h-screen bg-app text-strong antialiased`}
       >
-        <AuthProvider>
-          <QueryProvider>
-            <GlobalLoader />
-            {children}
-          </QueryProvider>
-        </AuthProvider>
+        <ErrorBoundary>
+          <AuthProvider>
+            <QueryProvider>
+              <GlobalLoader />
+              {children}
+            </QueryProvider>
+          </AuthProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

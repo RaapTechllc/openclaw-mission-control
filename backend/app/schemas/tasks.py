@@ -17,7 +17,6 @@ TaskStatus = Literal["inbox", "in_progress", "review", "done"]
 STATUS_REQUIRED_ERROR = "status is required"
 # Keep these symbols as runtime globals so Pydantic can resolve
 # deferred annotations reliably.
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID, NonEmptyStr, TagRef)
 
 
 class TaskBase(SQLModel):

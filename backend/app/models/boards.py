@@ -11,7 +11,6 @@ from sqlmodel import Field
 from app.core.time import utcnow
 from app.models.tenancy import TenantScoped
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 
 
 class Board(TenantScoped, table=True):
@@ -21,9 +20,9 @@ class Board(TenantScoped, table=True):
 
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     organization_id: UUID = Field(foreign_key="organizations.id", index=True)
-    name: str
-    slug: str = Field(index=True)
-    description: str = Field(default="")
+    name: str = Field(max_length=200)
+    slug: str = Field(index=True, max_length=200)
+    description: str = Field(default="", max_length=10000)
     gateway_id: UUID | None = Field(default=None, foreign_key="gateways.id", index=True)
     board_group_id: UUID | None = Field(
         default=None,
@@ -31,7 +30,7 @@ class Board(TenantScoped, table=True):
         index=True,
     )
     board_type: str = Field(default="goal", index=True)
-    objective: str | None = None
+    objective: str | None = Field(default=None, max_length=10000)
     success_metrics: dict[str, object] | None = Field(
         default=None,
         sa_column=Column(JSON),

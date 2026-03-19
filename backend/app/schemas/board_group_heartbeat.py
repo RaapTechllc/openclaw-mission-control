@@ -7,7 +7,6 @@ from uuid import UUID
 
 from sqlmodel import SQLModel
 
-RUNTIME_ANNOTATION_TYPES = (UUID,)
 
 
 class BoardGroupHeartbeatApply(SQLModel):

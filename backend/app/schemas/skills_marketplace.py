@@ -11,7 +11,6 @@ from sqlmodel._compat import SQLModelConfig
 
 from app.schemas.common import NonEmptyStr
 
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID, NonEmptyStr)
 
 
 class MarketplaceSkillCreate(SQLModel):

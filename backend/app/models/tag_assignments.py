@@ -11,7 +11,6 @@ from sqlmodel import Field
 from app.core.time import utcnow
 from app.models.base import QueryModel
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 
 
 class TagAssignment(QueryModel, table=True):

@@ -15,7 +15,6 @@ from app.schemas.boards import BoardRead
 from app.schemas.tags import TagRef
 from app.schemas.tasks import TaskRead
 
-RUNTIME_ANNOTATION_TYPES = (
     datetime,
     UUID,
     AgentRead,

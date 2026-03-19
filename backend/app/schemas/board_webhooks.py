@@ -10,7 +10,6 @@ from sqlmodel import SQLModel
 
 from app.schemas.common import NonEmptyStr
 
-RUNTIME_ANNOTATION_TYPES = (datetime, UUID, NonEmptyStr)
 
 
 class BoardWebhookCreate(SQLModel):

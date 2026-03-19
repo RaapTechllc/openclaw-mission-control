@@ -11,7 +11,6 @@ from sqlmodel._compat import SQLModelConfig
 
 from app.schemas.common import NonEmptyStr
 
-RUNTIME_ANNOTATION_TYPES = (UUID, NonEmptyStr)
 
 
 def _lead_reply_tags() -> list[str]:

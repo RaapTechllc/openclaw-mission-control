@@ -97,6 +97,24 @@ class Settings(BaseSettings):
         # schema drift (e.g. missing newly-added columns).
         if "db_auto_migrate" not in self.model_fields_set and self.environment == "dev":
             self.db_auto_migrate = True
+        # Warn if auto-migrate is enabled in production
+        if self.db_auto_migrate and self.environment == "production":
+            import warnings
+
+            warnings.warn(
+                "DB_AUTO_MIGRATE=true in production is dangerous with multiple replicas. "
+                "Run migrations as a pre-deploy step instead.",
+                stacklevel=2,
+            )
+        # Warn if ENVIRONMENT is not explicitly set
+        if "environment" not in self.model_fields_set:
+            import warnings
+
+            warnings.warn(
+                "ENVIRONMENT not explicitly set, defaulting to 'dev'. "
+                "Set ENVIRONMENT=production in production deployments.",
+                stacklevel=2,
+            )
         return self
 
 

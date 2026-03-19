@@ -7,7 +7,6 @@ from typing import Literal
 
 from sqlmodel import SQLModel
 
-RUNTIME_ANNOTATION_TYPES = (datetime,)
 DashboardRangeKey = Literal["24h", "3d", "7d", "14d", "1m", "3m", "6m", "1y"]
 DashboardBucketKey = Literal["hour", "day", "week", "month"]
 
