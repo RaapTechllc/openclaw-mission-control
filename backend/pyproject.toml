@@ -76,4 +76,4 @@ skip_covered = true
 # NOTE: Current baseline coverage is low; we publish coverage.xml in CI but
 # don't fail the build until the test suite expands. Tighten toward 100% in
 # follow-up PRs as coverage grows.
-fail_under = 0
+fail_under = 60
