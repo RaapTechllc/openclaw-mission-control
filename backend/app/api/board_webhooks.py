@@ -456,8 +456,15 @@ async def ingest_board_webhook(
 
     content_type = request.headers.get("content-type")
     headers = _captured_headers(request)
+    raw_body = await request.body()
+    max_payload_bytes = 1_048_576  # 1 MB
+    if len(raw_body) > max_payload_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail="Webhook payload exceeds 1 MB limit.",
+        )
     payload_value = _decode_payload(
-        await request.body(),
+        raw_body,
         content_type=content_type,
     )
     payload = BoardWebhookPayload(

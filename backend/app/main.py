@@ -5,7 +5,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from typing import TYPE_CHECKING, Any
 
-from fastapi import APIRouter, FastAPI, status
+from fastapi import APIRouter, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from fastapi_pagination import add_pagination
@@ -461,8 +461,8 @@ if origins:
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
+        allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type", "X-Agent-Token", "X-Request-Id"],
         expose_headers=["X-Total-Count", "X-Limit", "X-Offset"],
     )
     logger.info("app.cors.enabled origins_count=%s", len(origins))
@@ -522,16 +522,43 @@ def healthz() -> HealthStatusResponse:
     tags=["health"],
     response_model=HealthStatusResponse,
     summary="Readiness Check",
-    description="Readiness probe endpoint for service orchestration checks.",
+    description="Readiness probe verifying DB and Redis connectivity.",
     responses={
         status.HTTP_200_OK: {
             "description": "Service is ready.",
             "content": {"application/json": {"example": {"ok": True}}},
-        }
+        },
+        status.HTTP_503_SERVICE_UNAVAILABLE: {
+            "description": "One or more dependencies are unavailable.",
+        },
     },
 )
-def readyz() -> HealthStatusResponse:
-    """Readiness probe endpoint for service orchestration checks."""
+async def readyz() -> HealthStatusResponse:
+    """Readiness probe verifying DB and Redis connectivity."""
+    import redis.asyncio as aioredis
+    from sqlalchemy import text
+
+    from app.db.session import async_engine
+
+    try:
+        async with async_engine.connect() as conn:
+            await conn.execute(text("SELECT 1"))
+    except Exception:
+        logger.warning("readyz.db.failed")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database unavailable",
+        )
+    try:
+        r = aioredis.from_url(settings.rq_redis_url)
+        await r.ping()
+        await r.aclose()
+    except Exception:
+        logger.warning("readyz.redis.failed")
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Redis unavailable",
+        )
     return HealthStatusResponse(ok=True)
 
 

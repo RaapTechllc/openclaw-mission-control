@@ -49,11 +49,11 @@ class Settings(BaseSettings):
 
     cors_origins: str = ""
     base_url: str = ""
-    # Security response headers (blank disables header injection)
-    security_header_x_content_type_options: str = ""
-    security_header_x_frame_options: str = ""
-    security_header_referrer_policy: str = ""
-    security_header_permissions_policy: str = ""
+    # Security response headers
+    security_header_x_content_type_options: str = "nosniff"
+    security_header_x_frame_options: str = "DENY"
+    security_header_referrer_policy: str = "strict-origin-when-cross-origin"
+    security_header_permissions_policy: str = "camera=(), microphone=(), geolocation=()"
 
     # Database lifecycle
     db_auto_migrate: bool = False

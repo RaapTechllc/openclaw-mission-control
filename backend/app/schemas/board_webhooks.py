@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID
 
+from pydantic import Field
 from sqlmodel import SQLModel
 
 from app.schemas.common import NonEmptyStr
@@ -15,7 +16,7 @@ RUNTIME_ANNOTATION_TYPES = (datetime, UUID, NonEmptyStr)
 class BoardWebhookCreate(SQLModel):
     """Payload for creating a board webhook."""
 
-    description: NonEmptyStr
+    description: NonEmptyStr = Field(max_length=2000)
     enabled: bool = True
     agent_id: UUID | None = None
 
@@ -23,7 +24,7 @@ class BoardWebhookCreate(SQLModel):
 class BoardWebhookUpdate(SQLModel):
     """Payload for updating a board webhook."""
 
-    description: NonEmptyStr | None = None
+    description: NonEmptyStr | None = Field(default=None, max_length=2000)
     enabled: bool | None = None
     agent_id: UUID | None = None
 

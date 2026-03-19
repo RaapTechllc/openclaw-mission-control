@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
+from fastapi.responses import JSONResponse
+
 from app.core.auth import AuthContext, get_auth_context
+from app.core.csrf import generate_csrf_token, set_csrf_cookie
 from app.core.rate_limit import limiter
 from app.schemas.errors import LLMErrorResponse
 from app.schemas.users import UserRead
@@ -62,3 +65,17 @@ async def bootstrap_user(request: Request, auth: AuthContext = AUTH_CONTEXT_DEP)
     if auth.actor_type != "user" or auth.user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
     return UserRead.model_validate(auth.user)
+
+
+@router.get(
+    "/csrf-token",
+    summary="Get CSRF Token",
+    description="Returns a CSRF token cookie for local auth mode.",
+    tags=["auth"],
+)
+async def get_csrf_token() -> JSONResponse:
+    """Issue a CSRF token as a cookie for double-submit pattern."""
+    token = generate_csrf_token()
+    response = JSONResponse(content={"ok": True})
+    set_csrf_cookie(response, token)
+    return response
