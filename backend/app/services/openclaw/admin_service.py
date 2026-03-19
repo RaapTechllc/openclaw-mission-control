@@ -164,7 +164,7 @@ class GatewayAdminLifecycleService(OpenClawDBService):
             return False
         config = GatewayClientConfig(
             url=gateway.url,
-            token=gateway.token,
+            token=gateway.get_decrypted_token(),
             allow_insecure_tls=gateway.allow_insecure_tls,
             disable_device_pairing=gateway.disable_device_pairing,
         )

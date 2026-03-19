@@ -27,6 +27,7 @@ class Agent(QueryModel, table=True):
     status: str = Field(default="provisioning", index=True)
     openclaw_session_id: str | None = Field(default=None, index=True)
     agent_token_hash: str | None = Field(default=None, index=True)
+    agent_token_prefix: str | None = Field(default=None, index=True)
     heartbeat_config: dict[str, Any] | None = Field(
         default=None,
         sa_column=Column(JSON),

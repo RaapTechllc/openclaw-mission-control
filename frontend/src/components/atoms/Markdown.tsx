@@ -11,6 +11,7 @@ import {
 } from "react";
 
 import ReactMarkdown, { type Components } from "react-markdown";
+import rehypeSanitize from "rehype-sanitize";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 
@@ -274,7 +275,11 @@ export const Markdown = memo(function Markdown({
       ? MARKDOWN_COMPONENTS_DESCRIPTION
       : MARKDOWN_COMPONENTS_BASIC;
   return (
-    <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
+    <ReactMarkdown
+      remarkPlugins={remarkPlugins}
+      rehypePlugins={[rehypeSanitize]}
+      components={components}
+    >
       {trimmed}
     </ReactMarkdown>
   );

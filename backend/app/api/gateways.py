@@ -104,7 +104,11 @@ async def create_gateway(
     gateway_id = uuid4()
     data["id"] = gateway_id
     data["organization_id"] = ctx.organization.id
+    # Encrypt token at rest
+    raw_token = data.pop("token", None)
     gateway = await crud.create(session, Gateway, **data)
+    if raw_token:
+        gateway.set_encrypted_token(raw_token)
     await service.ensure_main_agent(gateway, auth, action="provision")
     return gateway
 
@@ -147,7 +151,7 @@ async def update_gateway(
     ):
         raw_next_url = updates.get("url", gateway.url)
         next_url = raw_next_url.strip() if isinstance(raw_next_url, str) else ""
-        next_token = updates.get("token", gateway.token)
+        next_token = updates.get("token", gateway.get_decrypted_token())
         next_allow_insecure_tls = bool(
             updates.get("allow_insecure_tls", gateway.allow_insecure_tls),
         )
@@ -161,7 +165,13 @@ async def update_gateway(
                 allow_insecure_tls=next_allow_insecure_tls,
                 disable_device_pairing=next_disable_device_pairing,
             )
+    # Encrypt token if being updated
+    raw_token = updates.pop("token", None)
     await crud.patch(session, gateway, updates)
+    if raw_token is not None:
+        gateway.set_encrypted_token(raw_token)
+        session.add(gateway)
+        await session.commit()
     await service.ensure_main_agent(gateway, auth, action="update")
     return gateway
 

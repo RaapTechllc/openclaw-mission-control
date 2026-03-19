@@ -31,7 +31,7 @@ def gateway_client_config(gateway: Gateway) -> GatewayClientConfig:
             status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
             detail="Gateway url is required",
         )
-    token = (gateway.token or "").strip() or None
+    token = (gateway.get_decrypted_token() or "").strip() or None
     return GatewayClientConfig(
         url=url,
         token=token,
@@ -47,7 +47,7 @@ def optional_gateway_client_config(gateway: Gateway | None) -> GatewayClientConf
     url = (gateway.url or "").strip()
     if not url:
         return None
-    token = (gateway.token or "").strip() or None
+    token = (gateway.get_decrypted_token() or "").strip() or None
     return GatewayClientConfig(
         url=url,
         token=token,

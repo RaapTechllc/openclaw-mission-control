@@ -9,11 +9,17 @@ import secrets
 
 ITERATIONS = 200_000
 SALT_BYTES = 16
+TOKEN_PREFIX_LENGTH = 8
 
 
 def generate_agent_token() -> str:
     """Generate a new URL-safe random token for an agent."""
     return secrets.token_urlsafe(32)
+
+
+def token_prefix(token: str) -> str:
+    """Return the first TOKEN_PREFIX_LENGTH chars for O(1) DB lookup."""
+    return token[:TOKEN_PREFIX_LENGTH]
 
 
 def _b64encode(value: bytes) -> str:

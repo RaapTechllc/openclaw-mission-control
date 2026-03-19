@@ -1,4 +1,13 @@
 repos:
+  - repo: local
+    hooks:
+      - id: block-env-files
+        name: Block .env files from being committed
+        entry: bash -c 'echo "ERROR: .env files must not be committed" && exit 1'
+        language: system
+        files: '\.env$'
+        exclude: '\.env\.(example|test)$'
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.6.0
     hooks:

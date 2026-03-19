@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Literal
 
-from app.core.agent_tokens import generate_agent_token, hash_agent_token
+from app.core.agent_tokens import generate_agent_token, hash_agent_token, token_prefix
 from app.core.time import utcnow
 from app.models.agents import Agent
 from app.services.openclaw.constants import DEFAULT_HEARTBEAT_CONFIG
@@ -22,6 +22,7 @@ def mint_agent_token(agent: Agent) -> str:
 
     raw_token = generate_agent_token()
     agent.agent_token_hash = hash_agent_token(raw_token)
+    agent.agent_token_prefix = token_prefix(raw_token)
     return raw_token
 
 

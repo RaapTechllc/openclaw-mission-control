@@ -22,7 +22,7 @@ from typing import TYPE_CHECKING, Literal
 from fastapi import Depends, Header, HTTPException, Request, status
 from sqlmodel import col, select
 
-from app.core.agent_tokens import verify_agent_token
+from app.core.agent_tokens import token_prefix, verify_agent_token
 from app.core.logging import get_logger
 from app.core.time import utcnow
 from app.db.session import get_session
@@ -47,9 +47,11 @@ class AgentAuthContext:
 
 
 async def _find_agent_for_token(session: AsyncSession, token: str) -> Agent | None:
+    prefix = token_prefix(token)
+    # O(1) index lookup by prefix, then verify single hash match
     agents = list(
         await session.exec(
-            select(Agent).where(col(Agent.agent_token_hash).is_not(None)),
+            select(Agent).where(col(Agent.agent_token_prefix) == prefix),
         ),
     )
     for agent in agents:

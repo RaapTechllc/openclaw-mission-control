@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from app.core.auth import AuthContext, get_auth_context
+from app.core.rate_limit import limiter
 from app.schemas.errors import LLMErrorResponse
 from app.schemas.users import UserRead
 
@@ -55,7 +56,8 @@ AUTH_CONTEXT_DEP = Depends(get_auth_context)
         },
     },
 )
-async def bootstrap_user(auth: AuthContext = AUTH_CONTEXT_DEP) -> UserRead:
+@limiter.limit("10/second")
+async def bootstrap_user(request: Request, auth: AuthContext = AUTH_CONTEXT_DEP) -> UserRead:
     """Return the authenticated user profile from token claims."""
     if auth.actor_type != "user" or auth.user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
